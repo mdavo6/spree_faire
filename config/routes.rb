@@ -1,3 +1,9 @@
-Spree::Core::Engine.add_routes do
-  # Add your extension routes here
+Spree::Core::Engine.routes.draw do
+  namespace :admin do
+    resources :stores do
+      member do
+        put :sync_inventory
+      end
+    end
+  end
 end

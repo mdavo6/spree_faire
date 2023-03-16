@@ -2,4 +2,16 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  spree:
+    faire: 
+      faire: Faire
+      api_key: API Key
+    error_requesting_processing: Error in requesting processing orders from Faire
+    item_out_of_stock_error: "%{item_name} is out of stock and is preventing the order being processed"
+    select_a_user: Select a user
+    inventory_update_issue: "Issue updating inventory: %{response}"
+    sync_inventory: Sync Inventory
+    get_variants_issue: "Issue fetching faire variants: %{response}"
+    inventory_sync_success: Inventory successfully synced
+    inventory_sync_error: Error while syncing inventory
   hello: "Hello world"

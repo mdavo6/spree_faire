@@ -1,6 +1,9 @@
 # SpreeFaire
 
-Introduction goes here.
+Spree integration for Faire marketplace.
+* Imports orders from Faire to Spree using FaireOrdersJob
+* Sync Faire inventory levels from Spree using Stores#SyncInventory
+* Update Faire inventory levels when a Spree Order is placed using FaireInventoryUpdateJob
 
 ## Installation
 
@@ -25,6 +28,14 @@ Introduction goes here.
 4. Restart your server
 
   If your server was running, restart it so that it can find the assets properly.
+  
+5. Create 'Faire' store
+
+  The gem requires a new store to be created in the backend. The new store should include the code 'faire'. Once the store has been created, obtain an API key by contacting Faire support. You will also need to select a user to associate with the Faire orders which are imported (Faire often does not provide an email address with orders).
+
+6. Create 'Faire' payment method.
+
+  The gem uses a payment method that must be called 
 
 ## Testing
 
