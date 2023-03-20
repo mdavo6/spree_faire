@@ -11,7 +11,9 @@ module SpreeFaire
     end
 
     def build_address
-      #country = get_country_for(@data[:country_iso_code] || @data[:country])
+      # Added as Faire does not include state for Australian orders
+      check_state_for_australian_addresses
+
       country = get_country_for(@data[:country])
       state = get_state_for(@data[:state], country)
       name_array = @data[:name].split
@@ -23,8 +25,8 @@ module SpreeFaire
         address2: @data[:address2],
         city: @data[:city],
         zipcode: @data[:postal_code],
-        firstname: (firstname || 'Mirakl'),
-        lastname: (lastname || 'User'),
+        firstname: (firstname || 'Faire'),
+        lastname: (lastname || 'Buyer'),
         state_name: state.name,
         state: state,
         company: @data[:company],
@@ -47,6 +49,27 @@ module SpreeFaire
 
     def get_state_for(name, country_id)
       Spree::State.find_by(name: name, country: country_id)
+    end
+    
+    def check_state_for_australian_addresses
+      if @data[:state].nil? && @data[:country] == "Australia"
+        case @data[:postal_code].first
+        when "0"
+          @data[:state] = "Northern Territory"
+        when "2"
+          @data[:state] = "New South Wales"
+        when "3"
+          @data[:state] = "Victoria"
+        when "4"
+          @data[:state] = "Queensland"
+        when "5"
+          @data[:state] = "South Australia"
+        when "6"
+          @data[:state] = "Western Australia"
+        when "7"
+          @data[:state] = "Tasmania"
+        end
+      end
     end
 
     def convert_phone(phone_number)
