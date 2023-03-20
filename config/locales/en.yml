@@ -14,4 +14,6 @@ en:
     get_variants_issue: "Issue fetching faire variants: %{response}"
     inventory_sync_success: Inventory successfully synced
     inventory_sync_error: Error while syncing inventory
+    orders_pulled_success: Orders successfully pulled from Faire
+    orders_pulled_error: Error while pulling orders from Faire
   hello: "Hello world"

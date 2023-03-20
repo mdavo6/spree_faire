@@ -17,6 +17,18 @@ module Spree
          redirect_to admin_stores_path
        end
        
+       def pull_orders
+         byebug
+         store = Spree::Store.find(params[:id])
+         service = Faire::OrderProcessing.new(store: store)
+         if service.call
+           flash[:success] = Spree.t(:orders_pulled_success)
+         else
+           flash[:error] = Spree.t(:orders_pulled_error)
+         end
+         redirect_to admin_stores_path
+       end
+       
        
        private
         

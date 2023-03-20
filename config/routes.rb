@@ -3,6 +3,7 @@ Spree::Core::Engine.routes.draw do
     resources :stores do
       member do
         put :sync_inventory
+        get :pull_orders
       end
     end
   end

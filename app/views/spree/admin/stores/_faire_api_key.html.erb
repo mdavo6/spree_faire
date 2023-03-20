@@ -25,4 +25,9 @@
     method: :put,
     icon: 'upload'
   %>
+  <%= button_link_to Spree.t(:pull_orders),
+    spree.pull_orders_admin_store_path,
+    method: :get,
+    icon: 'download'
+  %>
 <% end %>
