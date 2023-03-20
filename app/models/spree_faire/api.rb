@@ -9,7 +9,7 @@ class SpreeFaire::Api
   def get_processing_orders
     excluded_states = "NEW,PRE_TRANSIT,IN_TRANSIT,DELIVERED,PENDING_RETAILER_CONFIRMATION,BACKORDERED,CANCELED"
     ship_after_max = Time.now.utc.iso8601
-    @response = SpreeFaire::Request.new(@store).get("/orders?excluded_states=" + excluded_states) # + "&ship_after_max=" + ship_after_max)
+    @response = SpreeFaire::Request.new(@store).get("/orders?excluded_states=" + excluded_states + "&ship_after_max=" + ship_after_max)
   end
   
   def products

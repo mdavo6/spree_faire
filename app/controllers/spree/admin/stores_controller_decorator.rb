@@ -12,6 +12,7 @@ module Spree
          if service.call
            flash[:success] = Spree.t(:inventory_sync_success)
          else
+           raise Exception.new(service.errors.to_s)
            flash[:error] = Spree.t(:inventory_sync_error)
          end
          redirect_to admin_stores_path
@@ -23,6 +24,7 @@ module Spree
          if service.call
            flash[:success] = Spree.t(:orders_pulled_success)
          else
+           raise Exception.new(service.errors.to_s)
            flash[:error] = Spree.t(:orders_pulled_error)
          end
          redirect_to admin_stores_path
