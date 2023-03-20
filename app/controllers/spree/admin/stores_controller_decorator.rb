@@ -18,7 +18,6 @@ module Spree
        end
        
        def pull_orders
-         byebug
          store = Spree::Store.find(params[:id])
          service = Faire::OrderProcessing.new(store: store)
          if service.call
