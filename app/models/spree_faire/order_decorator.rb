@@ -6,7 +6,7 @@ module SpreeFaire
     end
     
     def update_faire
-      FaireInventoryUpdateJob.perform_now self.id, store.id
+      FaireInventoryUpdateJob.perform_later self.id, store.id
     end
     
     def faire_order?
