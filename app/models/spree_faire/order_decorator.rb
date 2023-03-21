@@ -4,9 +4,11 @@ module SpreeFaire
       base.has_one :faire_transaction, dependent: :destroy
       base.state_machine.after_transition to: :complete, do: :update_faire, unless: :faire_order?
     end
-    
+
     def update_faire
-      FaireInventoryUpdateJob.perform_later self.id, store.id
+      # Need API key from Faire store
+      faire_store = Spree::Store.find_by(code: "faire")
+      FaireInventoryUpdateJob.perform_later self.id, faire_store.id
     end
     
     def faire_order?
