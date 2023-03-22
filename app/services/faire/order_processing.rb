@@ -25,16 +25,19 @@ module Faire
 
     def process_orders(orders, store)
       orders.each do |order|
-        can_fulfill = true
-        order[:items].each do |item|
-          can_fulfill = check_stock(item[:sku], item[:quantity])
-          raise ServiceError.new([Spree.t(:item_out_of_stock_error, item_name: item[:product_name])]) unless can_fulfill
-          break unless can_fulfill
-        end
-        if can_fulfill
-          order[:store] = store
-          order_service = Faire::BuildOrder.new(order)
-          raise ServiceError.new([Spree.t(:order_process_error, order_id: order[:order_id]), order_service.errors]) unless order_service.call
+        # We only want to check inventory and import new orders
+        unless Spree::FaireTransaction.find_by(faire_order_id: order[:display_id]).present?
+          can_fulfill = true
+          order[:items].each do |item|
+            can_fulfill = check_stock(item[:sku], item[:quantity])
+            raise ServiceError.new([Spree.t(:item_out_of_stock_error, item_name: item[:product_name])]) unless can_fulfill
+            break unless can_fulfill
+          end
+          if can_fulfill
+            order[:store] = store
+            order_service = Faire::BuildOrder.new(order)
+            raise ServiceError.new([Spree.t(:order_process_error, order_id: order[:order_id]), order_service.errors]) unless order_service.call
+          end
         end
       end
     end

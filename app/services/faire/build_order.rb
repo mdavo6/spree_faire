@@ -14,9 +14,7 @@ module Faire
     def call
       begin
         # If order already exist we dont want to remake it. We may want to alert admin some how with an email
-        unless Spree::FaireTransaction.find_by(faire_order_id: @order_data[:display_id]).present?
-          build_order_for_user(@order_data, @store)
-        end
+        build_order_for_user(@order_data, @store)
       rescue ServiceError => error
         add_to_errors(error.messages)
       end
