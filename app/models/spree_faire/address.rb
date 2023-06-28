@@ -69,6 +69,8 @@ module SpreeFaire
         when "7"
           @data[:state] = "Tasmania"
         end
+      elsif @data[:state].nil? && @data[:country] == "Germany"
+        @data[:state] = "Niedersachsen"
       end
     end
 
