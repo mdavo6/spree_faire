@@ -14,6 +14,8 @@ module Faire
     def call
       begin
         # If order already exist we dont want to remake it. We may want to alert admin some how with an email
+        puts 'Store is:'
+        puts @store
         build_order_for_user(@order_data, @store)
       rescue ServiceError => error
         add_to_errors(error.messages)
