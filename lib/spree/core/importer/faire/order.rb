@@ -1,5 +1,47 @@
 class Spree::Core::Importer::Faire::Order < Spree::Core::Importer::Order
   class << self
+
+    # Override default import as need to use store_id to create order
+    def import(user, params)
+      ensure_country_id_from_params params[:ship_address_attributes]
+      ensure_state_id_from_params params[:ship_address_attributes]
+      ensure_country_id_from_params params[:bill_address_attributes]
+      ensure_state_id_from_params params[:bill_address_attributes]
+
+      # Add store_id to create_params
+      create_params = params.slice(:currency, :store_id)
+      order = Spree::Order.create! create_params
+      order.associate_user!(user)
+
+      shipments_attrs = params.delete(:shipments_attributes)
+
+      create_line_items_from_params(params.delete(:line_items_attributes), order)
+      create_shipments_from_params(shipments_attrs, order)
+      create_adjustments_from_params(params.delete(:adjustments_attributes), order)
+      create_payments_from_params(params.delete(:payments_attributes), order)
+
+      if completed_at = params.delete(:completed_at)
+        order.completed_at = completed_at
+        order.state = 'complete'
+      end
+
+      params.delete(:user_id) unless user.try(:has_spree_role?, 'admin') && params.key?(:user_id)
+      order.update!(params)
+      order.create_proposed_shipments unless shipments_attrs.present?
+
+      # Really ensure that the order totals & states are correct
+      order.updater.update
+      if shipments_attrs.present?
+        order.shipments.each_with_index do |shipment, index|
+          shipment.update_columns(cost: shipments_attrs[index][:cost].to_f) if shipments_attrs[index][:cost].present?
+        end
+      end
+      order.reload
+    rescue StandardError => e
+      order.destroy if order&.persisted?
+      raise e.message
+    end
+    
     # Override default create_payments because order requires response_code for Mirakl Orders
     def create_payments_from_params(payments_hash, order)
       return [] unless payments_hash

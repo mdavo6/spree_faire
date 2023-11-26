@@ -15,7 +15,7 @@ module Spree
            raise Exception.new(service.errors.to_s)
            flash[:error] = Spree.t(:inventory_sync_error)
          end
-         redirect_to admin_stores_path
+         redirect_to spree.edit_admin_store_path(store)
        end
        
        def pull_orders
@@ -27,7 +27,7 @@ module Spree
            raise Exception.new(service.errors.to_s)
            flash[:error] = Spree.t(:orders_pulled_error)
          end
-         redirect_to admin_stores_path
+         redirect_to spree.edit_admin_store_path(store)
        end
        
        
