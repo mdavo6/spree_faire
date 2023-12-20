@@ -23,7 +23,7 @@ module Faire
     def update_inventory(order)
       order.line_items.each do |line_item|
         variant = line_item.variant
-        @update_inventory_hash << update_inventory_json(variant)
+        @update_inventory_hash << update_inventory_json(variant) unless gift_certificate?(variant)
       end
 
       if @update_inventory_hash.present?
@@ -38,6 +38,10 @@ module Faire
         sku: variant.sku,
         current_quantity: variant.total_on_hand
       }
+    end
+
+    def gift_certificate?(variant)
+      variant.sku.start_with?("GC")
     end
     
   end
